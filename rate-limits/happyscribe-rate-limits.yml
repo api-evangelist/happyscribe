@@ -1,0 +1,65 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Happy Scribe
+providerId: happyscribe
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Audio Transcription
+- Transcription
+- Subtitles
+- Rate Limiting
+- Quotas
+description: >-
+  Happy Scribe does not publish fixed numeric per-minute request limits for its
+  REST API in the public developer documentation. The practical constraint on
+  usage is economic rather than a request-rate cap: transcription, subtitling, and
+  translation consume AI credits (per minute of media) or human-service credits
+  from your plan balance, so throughput is governed by your subscription allowance
+  and topped-up credits. Long-running work is asynchronous - create an order or
+  export, then poll its state or wait for a webhook - so clients should poll at a
+  reasonable interval and back off rather than tight-loop.
+notes: >-
+  No numeric per-account or per-endpoint request-rate limits are documented as of
+  the review date. Consumers should implement exponential backoff with jitter,
+  honor Retry-After on any 429, and prefer webhooks over aggressive polling.
+  Confirm any account-specific limits with Happy Scribe support.
+sources:
+- https://dev.happyscribe.com/
+- https://dev.happyscribe.com/sections/product/
+- https://www.happyscribe.com/integrations/api
+responseCodes:
+  throttled: 429
+limits:
+- name: REST API Requests
+  scope: account
+  metric: requests
+  limit: not published
+  notes: No fixed numeric request-rate limit is documented for the REST API.
+- name: AI Credit Allowance
+  scope: account
+  metric: minutes
+  limit: per plan
+  notes: Automatic transcription/subtitling/translation draws down per-minute AI credits from your plan and top-ups.
+- name: Human Service Allowance
+  scope: account
+  metric: minutes
+  limit: pay-per-use
+  notes: Professional (human) transcription and subtitling is billed per minute against balance.
+- name: Export Polling
+  scope: resource
+  metric: requests
+  limit: client-controlled
+  notes: Exports and orders are asynchronous; poll state at a reasonable interval or use webhooks.
+policies:
+- name: Webhooks over Polling
+  description: Register a webhook to receive an HTTP callback when a transcription completes, instead of polling.
+- name: Backoff Strategy
+  description: Implement exponential backoff with jitter and honor Retry-After on 429 responses.
+- name: Credit-Governed Throughput
+  description: Effective throughput is bounded by plan AI/human credit balance rather than a per-minute request cap.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

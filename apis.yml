@@ -1,0 +1,170 @@
+aid: happyscribe
+url: https://raw.githubusercontent.com/api-evangelist/happyscribe/refs/heads/main/apis.yml
+name: Happy Scribe
+kind: company
+description: Happy Scribe is a transcription, subtitling, and translation platform.
+  Its REST API (base https://www.happyscribe.com/api/v1, Bearer-token auth) turns
+  audio and video into text with automatic (machine) or professional (human)
+  transcription, generates and translates subtitles/captions, and exports finished
+  transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX,
+  plus editing-suite formats like Adobe Premiere XML, Final Cut Pro XML, EDL, and
+  Avid DS). Work is organized under organizations and folders, files are ingested
+  by URL or signed upload, and webhooks notify consumers when transcriptions
+  complete.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Audio Transcription
+- Transcription
+- Speech-to-Text
+- Subtitles
+- Captions
+- Translation
+created: '2026-07-11'
+modified: '2026-07-11'
+specificationVersion: '0.19'
+apis:
+- aid: happyscribe:happyscribe-transcriptions-api
+  name: Happy Scribe Transcriptions API
+  tags:
+  - Audio Transcription
+  - Transcription
+  - Speech-to-Text
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: https://dev.happyscribe.com/
+    type: APIReference
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: List, retrieve, update, and delete transcriptions, and fetch an
+    AI-generated summary of a transcription. Each transcription carries its
+    language, processing state, audio length, and cost. Creating transcriptions
+    directly is deprecated in favor of the Orders API. Core audio-to-text /
+    speech-to-text surface.
+- aid: happyscribe:happyscribe-orders-api
+  name: Happy Scribe Orders API
+  tags:
+  - Transcription
+  - Subtitles
+  - Translation
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: The preferred way to submit new work. Create transcription or
+    subtitling orders from a media URL and create translation orders, choosing
+    automatic (machine) or professional (human) service, then confirm and track
+    order state through fulfillment. Replaces the deprecated direct transcription
+    creation endpoint.
+- aid: happyscribe:happyscribe-exports-api
+  name: Happy Scribe Exports API
+  tags:
+  - Exports
+  - Subtitles
+  - Captions
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: Render finished transcripts into downloadable files across 15+
+    formats - subtitle/caption formats (SRT, VTT, STL), documents (DOCX, PDF, TXT,
+    JSON, CSV, XLSX), and editing-suite formats (Adobe Premiere XML, Final Cut Pro
+    XML, EDL, Avid DS). Create an export, then poll it for state and a download
+    link.
+- aid: happyscribe:happyscribe-organizations-api
+  name: Happy Scribe Organizations API
+  tags:
+  - Organizations
+  - Workspaces
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: List the organizations (workspaces) the authenticated user belongs
+    to, with role, member count, currency, and whether human transcription and
+    translation are enabled. Organizations scope transcriptions, orders, and
+    billing.
+- aid: happyscribe:happyscribe-organization-memberships-api
+  name: Happy Scribe Organization Memberships API
+  tags:
+  - Members
+  - Access Management
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: Manage who belongs to an organization - list memberships, add a
+    member by email with a role, update a member's role, and remove a member.
+    Enables programmatic workspace and seat administration.
+- aid: happyscribe:happyscribe-uploads-api
+  name: Happy Scribe Uploads API
+  tags:
+  - Uploads
+  - Files
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: Request a signed upload URL for a local media file, then PUT the
+    file to that URL and pass the resulting temporary URL when creating a
+    transcription or order. The ingestion path for files not already hosted at a
+    public URL.
+- aid: happyscribe:happyscribe-glossaries-style-guides-api
+  name: Happy Scribe Glossaries and Style Guides API
+  tags:
+  - Glossaries
+  - Style Guides
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://dev.happyscribe.com/sections/product/
+  baseURL: https://www.happyscribe.com/api/v1
+  properties:
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+  - url: openapi/happyscribe-openapi.yml
+    type: OpenAPI
+  description: List the glossaries and style guides available in an organization so
+    they can be attached to orders to improve transcription accuracy and enforce
+    formatting conventions.
+common:
+- type: Authentication
+  url: authentication/happyscribe-authentication.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/happyscribe
+- type: Website
+  url: https://www.happyscribe.com
+- type: Documentation
+  url: https://dev.happyscribe.com
+- type: Plans
+  url: plans/happyscribe-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/happyscribe-rate-limits.yml
+- type: FinOps
+  url: finops/happyscribe-finops.yml
+- url: https://www.happyscribe.com/blog
+  type: Blog
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

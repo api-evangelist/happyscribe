@@ -1,0 +1,245 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Transcriptions", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List transcriptions.", "type": "http" },
+          "http": { "method": "GET", "url": "https://www.happyscribe.com/api/v1/transcriptions?organization_id=" },
+          "docs": "Lists transcriptions in an organization."
+        },
+        {
+          "info": { "name": "Create a transcription (deprecated).", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions",
+            "body": { "type": "json", "data": "{\n  \"name\": \"\",\n  \"language\": \"en-US\",\n  \"tmp_url\": \"\",\n  \"service\": \"auto\",\n  \"organization_id\": \"\"\n}" }
+          },
+          "docs": "Deprecated. Prefer POST /orders to submit new work."
+        },
+        {
+          "info": { "name": "Retrieve a transcription.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The transcription ID." }
+            ]
+          },
+          "docs": "Retrieves a single transcription by ID."
+        },
+        {
+          "info": { "name": "Update a transcription.", "type": "http" },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The transcription ID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"name\": \"\"\n}" }
+          },
+          "docs": "Updates editable details of a transcription."
+        },
+        {
+          "info": { "name": "Delete a transcription.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The transcription ID." }
+            ]
+          },
+          "docs": "Deletes a transcription."
+        },
+        {
+          "info": { "name": "Retrieve a transcription summary.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id/summary",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The transcription ID." }
+            ]
+          },
+          "docs": "Retrieves the AI-generated summary for a transcription."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Orders", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create a transcription or subtitling order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders",
+            "body": { "type": "json", "data": "{\n  \"url\": \"\",\n  \"language\": \"en-US\",\n  \"organization_id\": \"\",\n  \"service\": \"auto\",\n  \"confirm\": true\n}" }
+          },
+          "docs": "Preferred way to submit new work. Creates an order from a media URL."
+        },
+        {
+          "info": { "name": "Create a translation order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders/translation",
+            "body": { "type": "json", "data": "{\n  \"transcription_id\": \"\",\n  \"target_language\": \"es\",\n  \"service\": \"auto\"\n}" }
+          },
+          "docs": "Creates an order to translate an existing transcription."
+        },
+        {
+          "info": { "name": "Retrieve an order.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/orders/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The order ID." }
+            ]
+          },
+          "docs": "Retrieves an order by ID, including its state."
+        },
+        {
+          "info": { "name": "Confirm an incomplete order.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders/:id/confirm",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The order ID." }
+            ]
+          },
+          "docs": "Confirms an order created in an incomplete state, submitting it for processing."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Exports", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Create an export.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/exports",
+            "body": { "type": "json", "data": "{\n  \"format\": \"srt\",\n  \"transcription_ids\": [\"\"],\n  \"show_timestamps\": true,\n  \"show_speakers\": true\n}" }
+          },
+          "docs": "Renders transcriptions into a downloadable file in the requested format (srt, vtt, stl, docx, pdf, txt, json, csv, xlsx, and more)."
+        },
+        {
+          "info": { "name": "Retrieve an export.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/exports/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The export ID." }
+            ]
+          },
+          "docs": "Retrieves an export by ID. Poll until state is ready, then use the download link."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Organizations", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List organizations.", "type": "http" },
+          "http": { "method": "GET", "url": "https://www.happyscribe.com/api/v1/organizations" },
+          "docs": "Lists the organizations the authenticated user belongs to."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Organization Memberships", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List organization memberships.", "type": "http" },
+          "http": { "method": "GET", "url": "https://www.happyscribe.com/api/v1/organization_memberships?organization_id=" },
+          "docs": "Lists memberships, optionally filtered by organization."
+        },
+        {
+          "info": { "name": "Add a member to an organization.", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships",
+            "body": { "type": "json", "data": "{\n  \"organization_id\": \"\",\n  \"email\": \"\",\n  \"role\": \"member\"\n}" }
+          },
+          "docs": "Adds a user to an organization by email, with a role."
+        },
+        {
+          "info": { "name": "Update a membership.", "type": "http" },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The membership ID." }
+            ],
+            "body": { "type": "json", "data": "{\n  \"role\": \"admin\"\n}" }
+          },
+          "docs": "Updates a member's role in an organization."
+        },
+        {
+          "info": { "name": "Remove a member.", "type": "http" },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships/:id",
+            "params": [
+              { "name": "id", "value": "", "type": "path", "description": "The membership ID." }
+            ]
+          },
+          "docs": "Removes a member from an organization."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Uploads", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Request a signed upload URL.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/uploads/new?filename=example.mp3",
+            "params": [
+              { "name": "filename", "value": "example.mp3", "type": "query", "description": "The name of the file to be uploaded." }
+            ]
+          },
+          "docs": "Returns a signed URL to PUT a local media file to; the returned temporary URL is then used when creating a transcription or order."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Glossaries and Style Guides", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "List glossaries.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/glossaries?organization_id=",
+            "params": [
+              { "name": "organization_id", "value": "", "type": "query", "description": "The organization to list glossaries for." }
+            ]
+          },
+          "docs": "Lists the glossaries available in an organization."
+        },
+        {
+          "info": { "name": "List style guides.", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/style_guides?organization_id=",
+            "params": [
+              { "name": "organization_id", "value": "", "type": "query", "description": "The organization to list style guides for." }
+            ]
+          },
+          "docs": "Lists the style guides available in an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

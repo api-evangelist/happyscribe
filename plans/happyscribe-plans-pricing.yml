@@ -1,0 +1,199 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Happy Scribe
+providerId: happyscribe
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Audio Transcription
+- Transcription
+- Subtitles
+- Translation
+- Plans
+description: >-
+  Happy Scribe combines subscription plans with pay-as-you-go credits, and the
+  API bills against the same balance as the web app. Subscriptions include a
+  monthly allotment of AI (automatic) minutes for transcription, subtitling, and
+  translation; additional AI usage is topped up at a per-minute rate. Professional
+  (human) transcription and subtitling is priced separately per minute. Rates
+  below are as published on the Happy Scribe pricing page (USD, monthly billing);
+  annual billing lowers the effective monthly price. Verify current numbers on the
+  pricing page during reconciliation.
+notes: >-
+  Pricing is quoted per minute by Happy Scribe; per-hour figures below are the
+  simple x60 conversion for convenience (e.g. AI $0.20/min = ~$12/hour; human from
+  $2.00/min = ~$120/hour). The API itself carries no separate fee - API usage
+  draws down the same plan credits and balance as the app.
+sources:
+- https://www.happyscribe.com/pricing
+- https://dev.happyscribe.com/
+- https://www.happyscribe.com/integrations/api
+plans:
+- id: happyscribe-free
+  name: Free
+  type: free
+  description: >-
+    Free trial tier for evaluating automatic transcription, with a small one-time
+    AI allowance.
+  entries:
+  - label: Included AI Minutes
+    name: free_ai_minutes
+    type: usage
+    metric: minutes
+    limit: 10
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0 (approx. 10-minute trial allowance)
+    userMultiplied: false
+  elements:
+  - name: Automatic Transcription
+  - name: Subtitles
+  - name: Exports
+- id: happyscribe-basic
+  name: Basic
+  type: subscription
+  description: >-
+    Entry subscription with a monthly AI allowance for automatic transcription,
+    subtitling, and translation.
+  entries:
+  - label: Monthly Subscription
+    name: basic_subscription
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $8.50 per month (billed monthly; ~$17 effective on annual varies)
+    userMultiplied: false
+  - label: Included AI Minutes
+    name: basic_ai_minutes
+    type: usage
+    metric: minutes
+    limit: 120
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included (120 AI minutes per month)
+    userMultiplied: false
+  elements:
+  - name: Automatic Transcription
+  - name: Subtitles
+  - name: Translation
+  - name: Exports
+- id: happyscribe-pro
+  name: Pro
+  type: subscription
+  description: >-
+    Higher monthly AI allowance for regular transcription and subtitling
+    workflows.
+  entries:
+  - label: Monthly Subscription
+    name: pro_subscription
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $19 per month
+    userMultiplied: false
+  - label: Included AI Minutes
+    name: pro_ai_minutes
+    type: usage
+    metric: minutes
+    limit: 600
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included (600 AI minutes per month)
+    userMultiplied: false
+  elements:
+  - name: Automatic Transcription
+  - name: Subtitles
+  - name: Translation
+  - name: Exports
+  - name: API Access
+- id: happyscribe-business
+  name: Business
+  type: subscription
+  description: >-
+    Team tier with a large monthly AI allowance and a discount on human
+    proofreading.
+  entries:
+  - label: Monthly Subscription
+    name: business_subscription
+    type: flat
+    metric: subscription
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $59 per month
+    userMultiplied: false
+  - label: Included AI Minutes
+    name: business_ai_minutes
+    type: usage
+    metric: minutes
+    limit: 6000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: included (6,000 AI minutes per month)
+    userMultiplied: false
+  elements:
+  - name: Automatic Transcription
+  - name: Subtitles
+  - name: Translation
+  - name: Exports
+  - name: API Access
+  - name: Human Proofreading Discount
+- id: happyscribe-payg
+  name: Pay-as-you-go Credits
+  type: usage
+  description: >-
+    Metered top-up usage above plan allowances. AI credits cover automatic
+    transcription, subtitling, and translation; professional (human) services are
+    billed separately per minute. Topped-up AI credits persist beyond the billing
+    period.
+  entries:
+  - label: AI Credits (Transcription / Subtitles / Translation)
+    name: ai_credits
+    type: usage
+    metric: minutes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0.20 per minute (~$12 per hour)
+    userMultiplied: false
+  - label: Human Proofreading / Professional
+    name: human_service
+    type: usage
+    metric: minutes
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: from $2.00 per minute (~$120 per hour); ~$1.90/min on Business
+    userMultiplied: false
+  - label: Additional User Seat
+    name: additional_seat
+    type: usage
+    metric: seats
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $29 per seat / month ($19 on annual)
+    userMultiplied: true
+  elements:
+  - name: Automatic Transcription
+  - name: Human Transcription
+  - name: Subtitle Translation
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,241 @@
+{
+  "info": {
+    "name": "Happy Scribe API",
+    "description": "Programmatic transcription, subtitling, translation, and export via the Happy Scribe REST API. Base URL: https://www.happyscribe.com/api/v1. All requests require a Bearer API token from your Happy Scribe account settings. Submit new work through Orders; manage Transcriptions; render Exports in 15+ formats; administer Organizations and Memberships. Request/response fields are modeled from the public docs at dev.happyscribe.com.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{bearerToken}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://www.happyscribe.com/api/v1", "type": "string" },
+    { "key": "bearerToken", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Transcriptions",
+      "item": [
+        {
+          "name": "List transcriptions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transcriptions?organization_id=", "host": ["{{baseUrl}}"], "path": ["transcriptions"], "query": [{ "key": "organization_id", "value": "" }] },
+            "description": "Lists transcriptions in an organization."
+          }
+        },
+        {
+          "name": "Create a transcription (deprecated)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"\",\n  \"language\": \"en-US\",\n  \"tmp_url\": \"\",\n  \"service\": \"auto\",\n  \"organization_id\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/transcriptions", "host": ["{{baseUrl}}"], "path": ["transcriptions"] },
+            "description": "Deprecated. Prefer POST /orders to submit new work."
+          }
+        },
+        {
+          "name": "Retrieve a transcription",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transcriptions/:id", "host": ["{{baseUrl}}"], "path": ["transcriptions", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves a single transcription by ID."
+          }
+        },
+        {
+          "name": "Update a transcription",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"\"\n}" },
+            "url": { "raw": "{{baseUrl}}/transcriptions/:id", "host": ["{{baseUrl}}"], "path": ["transcriptions", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Updates editable details of a transcription."
+          }
+        },
+        {
+          "name": "Delete a transcription",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transcriptions/:id", "host": ["{{baseUrl}}"], "path": ["transcriptions", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Deletes a transcription."
+          }
+        },
+        {
+          "name": "Retrieve a transcription summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/transcriptions/:id/summary", "host": ["{{baseUrl}}"], "path": ["transcriptions", ":id", "summary"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves the AI-generated summary for a transcription."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create a transcription or subtitling order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"url\": \"\",\n  \"language\": \"en-US\",\n  \"organization_id\": \"\",\n  \"service\": \"auto\",\n  \"confirm\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/orders", "host": ["{{baseUrl}}"], "path": ["orders"] },
+            "description": "Preferred way to submit new work. Creates an order from a media URL."
+          }
+        },
+        {
+          "name": "Create a translation order",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"transcription_id\": \"\",\n  \"target_language\": \"es\",\n  \"service\": \"auto\"\n}" },
+            "url": { "raw": "{{baseUrl}}/orders/translation", "host": ["{{baseUrl}}"], "path": ["orders", "translation"] },
+            "description": "Creates an order to translate an existing transcription."
+          }
+        },
+        {
+          "name": "Retrieve an order",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders/:id", "host": ["{{baseUrl}}"], "path": ["orders", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves an order by ID, including its state."
+          }
+        },
+        {
+          "name": "Confirm an incomplete order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/orders/:id/confirm", "host": ["{{baseUrl}}"], "path": ["orders", ":id", "confirm"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Confirms an order created in an incomplete state, submitting it for processing."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Exports",
+      "item": [
+        {
+          "name": "Create an export",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"format\": \"srt\",\n  \"transcription_ids\": [\"\"],\n  \"show_timestamps\": true,\n  \"show_speakers\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/exports", "host": ["{{baseUrl}}"], "path": ["exports"] },
+            "description": "Renders transcriptions into a downloadable file in the requested format."
+          }
+        },
+        {
+          "name": "Retrieve an export",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/exports/:id", "host": ["{{baseUrl}}"], "path": ["exports", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Retrieves an export by ID. Poll until state is ready, then use the download link."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organizations",
+      "item": [
+        {
+          "name": "List organizations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organizations", "host": ["{{baseUrl}}"], "path": ["organizations"] },
+            "description": "Lists the organizations the authenticated user belongs to."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Organization Memberships",
+      "item": [
+        {
+          "name": "List organization memberships",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organization_memberships?organization_id=", "host": ["{{baseUrl}}"], "path": ["organization_memberships"], "query": [{ "key": "organization_id", "value": "" }] },
+            "description": "Lists memberships, optionally filtered by organization."
+          }
+        },
+        {
+          "name": "Add a member to an organization",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"organization_id\": \"\",\n  \"email\": \"\",\n  \"role\": \"member\"\n}" },
+            "url": { "raw": "{{baseUrl}}/organization_memberships", "host": ["{{baseUrl}}"], "path": ["organization_memberships"] },
+            "description": "Adds a user to an organization by email, with a role."
+          }
+        },
+        {
+          "name": "Update a membership",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"role\": \"admin\"\n}" },
+            "url": { "raw": "{{baseUrl}}/organization_memberships/:id", "host": ["{{baseUrl}}"], "path": ["organization_memberships", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Updates a member's role in an organization."
+          }
+        },
+        {
+          "name": "Remove a member",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/organization_memberships/:id", "host": ["{{baseUrl}}"], "path": ["organization_memberships", ":id"], "variable": [{ "key": "id", "value": "" }] },
+            "description": "Removes a member from an organization."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Uploads",
+      "item": [
+        {
+          "name": "Request a signed upload URL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/uploads/new?filename=example.mp3", "host": ["{{baseUrl}}"], "path": ["uploads", "new"], "query": [{ "key": "filename", "value": "example.mp3" }] },
+            "description": "Returns a signed URL to PUT a local media file to; the returned temporary URL is then used when creating a transcription or order."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Glossaries and Style Guides",
+      "item": [
+        {
+          "name": "List glossaries",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/glossaries?organization_id=", "host": ["{{baseUrl}}"], "path": ["glossaries"], "query": [{ "key": "organization_id", "value": "" }] },
+            "description": "Lists the glossaries available in an organization."
+          }
+        },
+        {
+          "name": "List style guides",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/style_guides?organization_id=", "host": ["{{baseUrl}}"], "path": ["style_guides"], "query": [{ "key": "organization_id", "value": "" }] },
+            "description": "Lists the style guides available in an organization."
+          }
+        }
+      ]
+    }
+  ]
+}

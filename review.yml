@@ -1,0 +1,108 @@
+aid: happyscribe
+name: Happy Scribe
+review:
+  question: Does Happy Scribe expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-11'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Happy Scribe's public API is
+    request/response REST over HTTPS (base https://www.happyscribe.com/api/v1).
+    For asynchronous work (transcription, order, and export processing), consumers
+    either poll the resource for its state or register a webhook to receive an
+    HTTP callback when a transcription completes. Webhooks are server-to-endpoint
+    HTTP POSTs, not a server-push streaming transport on Happy Scribe's own API,
+    and there is no documented SSE stream to model either. There is therefore no
+    WebSocket or SSE surface on Happy Scribe's own API to describe in AsyncAPI.
+findings:
+  summary: |
+    Happy Scribe does not publish a documented public WebSocket API. Happy Scribe
+    is a transcription, subtitling, and translation platform whose public API is a
+    REST/HTTPS interface at https://www.happyscribe.com/api/v1, authenticated with
+    a Bearer API token from account settings. Documented resources include
+    Transcriptions, Orders (the preferred way to submit work; supersedes direct
+    transcription creation), Exports, Organizations, Organization Memberships,
+    Uploads (signed S3 upload URLs), and Glossaries / Style Guides. Long-running
+    work is handled asynchronously by polling resource state or by registering a
+    webhook that fires when a transcription completes. No realtime, bidirectional,
+    or streaming WebSocket (ws:// or wss://) endpoint is documented anywhere in
+    the Happy Scribe developer documentation as of the review date.
+  accessModel: |
+    Happy Scribe is a commercial SaaS. The API is available to account holders and
+    keyed by a Bearer API token; usage is billed against the same subscription /
+    pay-as-you-go credit model as the web app (AI credits per minute, human
+    services per minute). There is no open-source server component.
+  sharedLinksNote: |
+    The task brief anticipated a "Shared Links" API. As of the review date, Happy
+    Scribe does NOT document a shared/public-links resource in its API - exposing
+    public share links through the API is an open, user-requested feature
+    (feedback.happyscribe.com), not a shipped endpoint. It was therefore NOT
+    modeled as a logical API. Sharing/collaboration exists in the product UI, but
+    is not part of the documented REST surface.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://www.happyscribe.com/api/v1
+      documented: true
+      note: All documented resources are request/response REST over HTTPS.
+    - protocol: Webhook
+      scheme: https
+      documented: true
+      note: HTTP callbacks fire when a transcription completes, so consumers avoid polling. Server-to-endpoint HTTP, not WebSocket.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented anywhere in Happy Scribe's developer documentation as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://www.happyscribe.com/api/v1/transcriptions
+    - POST   https://www.happyscribe.com/api/v1/transcriptions
+    - GET    https://www.happyscribe.com/api/v1/transcriptions/{id}
+    - PATCH  https://www.happyscribe.com/api/v1/transcriptions/{id}
+    - DELETE https://www.happyscribe.com/api/v1/transcriptions/{id}
+    - GET    https://www.happyscribe.com/api/v1/transcriptions/{id}/summary
+    - POST   https://www.happyscribe.com/api/v1/orders
+    - POST   https://www.happyscribe.com/api/v1/orders/translation
+    - GET    https://www.happyscribe.com/api/v1/orders/{id}
+    - POST   https://www.happyscribe.com/api/v1/orders/{id}/confirm
+    - POST   https://www.happyscribe.com/api/v1/exports
+    - GET    https://www.happyscribe.com/api/v1/exports/{id}
+    - GET    https://www.happyscribe.com/api/v1/organizations
+    - GET    https://www.happyscribe.com/api/v1/organization_memberships
+    - POST   https://www.happyscribe.com/api/v1/organization_memberships
+    - PATCH  https://www.happyscribe.com/api/v1/organization_memberships/{id}
+    - DELETE https://www.happyscribe.com/api/v1/organization_memberships/{id}
+    - GET    https://www.happyscribe.com/api/v1/uploads/new
+    - GET    https://www.happyscribe.com/api/v1/glossaries
+    - GET    https://www.happyscribe.com/api/v1/style_guides
+  modeledNote: |
+    Endpoint paths, the auth scheme, and the resource set are grounded in the
+    public developer documentation at dev.happyscribe.com. Request and response
+    field schemas in openapi/happyscribe-openapi.yml are honestly modeled from
+    that documentation and may not enumerate every field; they should be reconciled
+    against the live reference before being treated as authoritative.
+sources:
+  - url: https://dev.happyscribe.com/
+    type: APIReference
+    note: Developer documentation home; REST base https://www.happyscribe.com/api/v1, Bearer auth.
+  - url: https://dev.happyscribe.com/sections/product/
+    type: Documentation
+    note: Product API sections - Transcriptions, Orders, Exports, Organizations, Memberships, Uploads, Glossaries, Style Guides. All REST. No WebSocket.
+  - url: https://www.happyscribe.com/integrations/api
+    type: Documentation
+    note: API integration overview - transcriptions, exports, folders, 15+ export formats, webhooks. No realtime/WebSocket surface.
+  - url: https://www.happyscribe.com/features/api
+    type: Documentation
+    note: Marketing/features page for the API.
+  - url: https://www.happyscribe.com/pricing
+    type: Pricing
+    note: Subscription tiers plus per-minute pay-as-you-go AI and human rates.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket protocol surface exists. Happy Scribe's public API is
+    request/response REST; asynchronous processing is handled by polling resource
+    state or by webhook callbacks (server-to-endpoint HTTP), neither of which is a
+    WebSocket or an SSE server-push stream on Happy Scribe's own API. No AsyncAPI
+    document was created because there is no server-push transport to model.

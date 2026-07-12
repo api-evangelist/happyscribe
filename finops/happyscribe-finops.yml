@@ -1,0 +1,98 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Happy Scribe
+providerId: happyscribe
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- Audio Transcription
+- Transcription
+- Subtitles
+- Translation
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Happy Scribe spend. Cost is driven by minutes of media
+  processed, not by API call volume. A monthly subscription provides a fixed AI
+  (automatic) minute allowance for transcription, subtitling, and translation;
+  usage above the allowance is topped up per minute of media, and professional
+  (human) services are billed separately per minute. API usage draws down the same
+  balance as the web app, so cost governance is about controlling how many minutes
+  of audio/video are submitted and whether human service is used.
+notes: >-
+  Per-unit rates are on the Happy Scribe pricing page and are captured in
+  plans/happyscribe-plans-pricing.yml; they are not reconciled here. Dominant cost
+  levers are total minutes transcribed, automatic vs. human service, extra
+  translation passes, and additional user seats.
+sources:
+- https://www.happyscribe.com/pricing
+- https://dev.happyscribe.com/
+- https://www.happyscribe.com/integrations/api
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Happy Scribe
+serviceCategory: AI and Machine Learning
+billingModel:
+  pricingCategory: Subscription plus Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Happy Scribe
+  ServiceCategory: AI and Machine Learning
+  ProviderName: Happy Scribe
+  PublisherName: Happy Scribe
+  InvoiceIssuerName: Happy Scribe
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: ai_minutes
+  description: Minutes of media processed by automatic transcription, subtitling, or translation, drawn from plan credits.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - organization
+  - service
+- name: human_minutes
+  description: Minutes of media processed by professional (human) transcription or subtitling, billed per minute.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - organization
+  - service
+- name: translation_minutes
+  description: Minutes of media translated into additional languages.
+  unit: minutes
+  aggregation: sum
+  dimensions:
+  - organization
+- name: seats
+  description: Additional user seats beyond the plan default.
+  unit: seats
+  aggregation: max
+  dimensions:
+  - organization
+principles:
+- name: Visibility
+  description: Track minutes transcribed per organization and per service (auto vs. human) so spend maps to workloads and teams.
+- name: Allocation
+  description: Use organizations and folders to attribute transcription minutes to internal cost centers.
+- name: Optimization
+  description: Prefer automatic service where accuracy allows; reserve human proofreading for high-stakes content; avoid redundant re-exports and translation passes; right-size the subscription tier to expected monthly minutes.
+- name: Accountability
+  description: Assign an owner per organization and review monthly AI/human minute consumption against plan allowances and top-ups.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
