@@ -149,6 +149,8 @@ apis:
     they can be attached to orders to improve transcription accuracy and enforce
     formatting conventions.
 common:
+- type: AgenticAccess
+  url: agentic-access/happyscribe-agentic-access.yml
 - type: Authentication
   url: authentication/happyscribe-authentication.yml
 - type: LinkedIn
