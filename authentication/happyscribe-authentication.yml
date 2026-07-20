@@ -9,6 +9,6 @@ schemes:
   type: http
   scheme: bearer
   description: 'API token from your Happy Scribe account settings, passed as `Authorization:
-    Bearer YOUR_API_TOKEN`.'
+    Bearer [example key]`.'
   sources:
   - openapi/happyscribe-openapi.yml
