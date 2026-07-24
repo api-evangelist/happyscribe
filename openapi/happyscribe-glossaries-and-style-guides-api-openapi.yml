@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe Exports Glossaries and Style Guides API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+- url: https://www.happyscribe.com/api/v1
+  description: Happy Scribe API v1
+security:
+- bearerAuth: []
+tags:
+- name: Glossaries and Style Guides
+  description: Reusable glossaries and style guides attachable to orders.
+paths:
+  /glossaries:
+    get:
+      operationId: listGlossaries
+      tags:
+      - Glossaries and Style Guides
+      summary: List glossaries
+      description: Lists the glossaries available in an organization.
+      parameters:
+      - name: organization_id
+        in: query
+        required: true
+        description: The organization to list glossaries for.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of glossaries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Glossary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /style_guides:
+    get:
+      operationId: listStyleGuides
+      tags:
+      - Glossaries and Style Guides
+      summary: List style guides
+      description: Lists the style guides available in an organization.
+      parameters:
+      - name: organization_id
+        in: query
+        required: true
+        description: The organization to list style guides for.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of style guides.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StyleGuide'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Glossary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+    StyleGuide:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token from your Happy Scribe account settings, passed as `Authorization: Bearer YOUR_API_TOKEN`.'

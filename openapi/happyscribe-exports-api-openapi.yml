@@ -1,0 +1,142 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe Exports API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+- url: https://www.happyscribe.com/api/v1
+  description: Happy Scribe API v1
+security:
+- bearerAuth: []
+tags:
+- name: Exports
+  description: Render finished transcripts into downloadable files.
+paths:
+  /exports:
+    post:
+      operationId: createExport
+      tags:
+      - Exports
+      summary: Create an export
+      description: Creates an export that renders one or more transcriptions into a downloadable file in the requested format.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportInput'
+      responses:
+        '201':
+          description: The created export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /exports/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getExport
+      tags:
+      - Exports
+      summary: Retrieve an export
+      description: Retrieves an export by ID. Poll this endpoint until the state is ready, then use the download link.
+      responses:
+        '200':
+          description: The requested export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    ExportInput:
+      type: object
+      required:
+      - format
+      - transcription_ids
+      properties:
+        format:
+          type: string
+          description: Output format, e.g. txt, docx, pdf, srt, vtt, stl, json, csv, xlsx, mp3, mp4, and editing-suite formats.
+        transcription_ids:
+          type: array
+          items:
+            type: string
+        show_timestamps:
+          type: boolean
+        show_speakers:
+          type: boolean
+        show_comments:
+          type: boolean
+        show_highlights:
+          type: boolean
+    Export:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+          - pending
+          - processing
+          - ready
+          - expired
+          - failed
+        format:
+          type: string
+        download_link:
+          type: string
+          format: uri
+          description: Present when the export state is ready.
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token from your Happy Scribe account settings, passed as `Authorization: Bearer YOUR_API_TOKEN`.'

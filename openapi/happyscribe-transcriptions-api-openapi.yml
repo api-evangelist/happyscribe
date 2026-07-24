@@ -1,0 +1,260 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe Exports Transcriptions API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+- url: https://www.happyscribe.com/api/v1
+  description: Happy Scribe API v1
+security:
+- bearerAuth: []
+tags:
+- name: Transcriptions
+  description: List, retrieve, update, and delete transcriptions.
+paths:
+  /transcriptions:
+    get:
+      operationId: listTranscriptions
+      tags:
+      - Transcriptions
+      summary: List transcriptions
+      description: Lists transcriptions in an organization.
+      parameters:
+      - name: organization_id
+        in: query
+        required: false
+        description: Filter transcriptions by organization.
+        schema:
+          type: string
+      - name: folder_id
+        in: query
+        required: false
+        description: Filter transcriptions by folder.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of transcriptions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createTranscription
+      tags:
+      - Transcriptions
+      summary: Create a transcription (deprecated)
+      description: Deprecated. Creating a transcription directly is superseded by the Orders API; use POST /orders instead. Retained here because it remains documented for backward compatibility.
+      deprecated: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptionInput'
+      responses:
+        '201':
+          description: The created transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /transcriptions/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getTranscription
+      tags:
+      - Transcriptions
+      summary: Retrieve a transcription
+      description: Retrieves a single transcription by ID, including its state and metadata.
+      responses:
+        '200':
+          description: The requested transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateTranscription
+      tags:
+      - Transcriptions
+      summary: Update a transcription
+      description: Updates editable details of a transcription, such as its name or folder.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                folder_id:
+                  type: string
+      responses:
+        '200':
+          description: The updated transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      operationId: deleteTranscription
+      tags:
+      - Transcriptions
+      summary: Delete a transcription
+      description: Deletes a transcription.
+      responses:
+        '204':
+          description: The transcription was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /transcriptions/{id}/summary:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getTranscriptionSummary
+      tags:
+      - Transcriptions
+      summary: Retrieve a transcription summary
+      description: Retrieves the AI-generated summary for a transcription (for example, a meeting summary), when available.
+      responses:
+        '200':
+          description: The transcription summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  summary:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    TranscriptionInput:
+      type: object
+      required:
+      - name
+      - language
+      - tmp_url
+      - organization_id
+      properties:
+        name:
+          type: string
+        language:
+          type: string
+          description: BCP-47 language code of the audio.
+        tmp_url:
+          type: string
+          format: uri
+          description: Public or signed URL of the media file to transcribe.
+        service:
+          type: string
+          enum:
+          - auto
+          - pro
+          - alignment
+        organization_id:
+          type: string
+        folder_id:
+          type: string
+        is_subtitle:
+          type: boolean
+          default: false
+        tags:
+          type: array
+          items:
+            type: string
+    Transcription:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        state:
+          type: string
+          description: Processing state of the transcription.
+        language:
+          type: string
+        audioLengthInSeconds:
+          type: number
+        costInCents:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token from your Happy Scribe account settings, passed as `Authorization: Bearer YOUR_API_TOKEN`.'

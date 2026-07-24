@@ -1,0 +1,81 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe Exports Organizations API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+- url: https://www.happyscribe.com/api/v1
+  description: Happy Scribe API v1
+security:
+- bearerAuth: []
+tags:
+- name: Organizations
+  description: Organizations (workspaces) the authenticated user belongs to.
+paths:
+  /organizations:
+    get:
+      operationId: listOrganizations
+      tags:
+      - Organizations
+      summary: List organizations
+      description: Lists the organizations the authenticated user belongs to.
+      responses:
+        '200':
+          description: A list of organizations.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+          - owner
+          - admin
+          - member
+          - guest
+        membersCount:
+          type: integer
+        currency:
+          type: string
+        isHumanTranscriptionAllowed:
+          type: boolean
+        isHumanTranslationAllowed:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token from your Happy Scribe account settings, passed as `Authorization: Bearer YOUR_API_TOKEN`.'

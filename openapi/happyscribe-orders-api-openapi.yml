@@ -1,0 +1,222 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe Exports Orders API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+- url: https://www.happyscribe.com/api/v1
+  description: Happy Scribe API v1
+security:
+- bearerAuth: []
+tags:
+- name: Orders
+  description: Create and track transcription, subtitling, and translation orders.
+paths:
+  /orders:
+    post:
+      operationId: createOrder
+      tags:
+      - Orders
+      summary: Create a transcription or subtitling order
+      description: Creates an order to transcribe or subtitle a media file from a URL, using automatic (machine) or professional (human) service. This is the preferred way to submit new work.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /orders/translation:
+    post:
+      operationId: createTranslationOrder
+      tags:
+      - Orders
+      summary: Create a translation order
+      description: Creates an order to translate an existing transcription into a target language.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - transcription_id
+              - target_language
+              properties:
+                transcription_id:
+                  type: string
+                target_language:
+                  type: string
+                  description: BCP-47 target language code.
+                service:
+                  type: string
+                  enum:
+                  - auto
+                  - pro
+      responses:
+        '201':
+          description: The created translation order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /orders/{id}:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getOrder
+      tags:
+      - Orders
+      summary: Retrieve an order
+      description: Retrieves an order by ID, including its state.
+      responses:
+        '200':
+          description: The requested order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders/{id}/confirm:
+    parameters:
+    - $ref: '#/components/parameters/Id'
+    post:
+      operationId: confirmOrder
+      tags:
+      - Orders
+      summary: Confirm an incomplete order
+      description: Confirms an order that was created in an incomplete state, submitting it for processing.
+      responses:
+        '200':
+          description: The confirmed order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  schemas:
+    OrderInput:
+      type: object
+      required:
+      - url
+      - language
+      - organization_id
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Public or signed URL of the media file.
+        language:
+          type: string
+          description: BCP-47 language code.
+        organization_id:
+          type: string
+        service:
+          type: string
+          enum:
+          - auto
+          - pro
+        is_subtitle:
+          type: boolean
+          default: false
+        confirm:
+          type: boolean
+          description: When true, submit immediately instead of leaving the order incomplete.
+        glossary_ids:
+          type: array
+          items:
+            type: string
+        style_guide_id:
+          type: string
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+          - incomplete
+          - waiting_for_payment
+          - submitted
+          - locked
+          - fulfilled
+          - failed
+          - canceled
+          - expired
+        service:
+          type: string
+        language:
+          type: string
+        transcription_ids:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'API token from your Happy Scribe account settings, passed as `Authorization: Bearer YOUR_API_TOKEN`.'
