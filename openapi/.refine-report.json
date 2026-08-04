@@ -1,0 +1,26 @@
+{
+  "provider": "happyscribe",
+  "sources": [
+    "happyscribe-exports-api-openapi.yml",
+    "happyscribe-glossaries-and-style-guides-api-openapi.yml",
+    "happyscribe-orders-api-openapi.yml",
+    "happyscribe-organization-memberships-api-openapi.yml",
+    "happyscribe-organizations-api-openapi.yml",
+    "happyscribe-transcriptions-api-openapi.yml",
+    "happyscribe-uploads-api-openapi.yml"
+  ],
+  "outputs": [
+    "happyscribe-exports-api-openapi.yml",
+    "happyscribe-glossaries-and-style-guides-api-openapi.yml",
+    "happyscribe-orders-api-openapi.yml",
+    "happyscribe-organization-memberships-api-openapi.yml",
+    "happyscribe-organizations-api-openapi.yml",
+    "happyscribe-transcriptions-api-openapi.yml",
+    "happyscribe-uploads-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

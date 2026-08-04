@@ -1,0 +1,840 @@
+openapi: 3.0.3
+info:
+  title: Happy Scribe API
+  description: >-
+    The Happy Scribe API turns audio and video into text and subtitles
+    programmatically. Submit work through the Orders API (automatic/machine or
+    professional/human service), manage the resulting transcriptions, export
+    finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON,
+    CSV, XLSX, and editing-suite formats), and administer organizations and their
+    members. Files are ingested by public URL or via a signed upload. All requests
+    are REST over HTTPS and authenticated with a Bearer API token from your Happy
+    Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint
+    paths and fields are grounded in the public developer documentation
+    (dev.happyscribe.com); request/response schemas below are honestly modeled
+    from that documentation and may not enumerate every field.
+  version: '1.0'
+  contact:
+    name: Happy Scribe
+    url: https://dev.happyscribe.com
+servers:
+  - url: https://www.happyscribe.com/api/v1
+    description: Happy Scribe API v1
+security:
+  - bearerAuth: []
+tags:
+  - name: Transcriptions
+    description: List, retrieve, update, and delete transcriptions.
+  - name: Orders
+    description: Create and track transcription, subtitling, and translation orders.
+  - name: Exports
+    description: Render finished transcripts into downloadable files.
+  - name: Organizations
+    description: Organizations (workspaces) the authenticated user belongs to.
+  - name: Organization Memberships
+    description: Manage members and roles within an organization.
+  - name: Uploads
+    description: Signed upload URLs for local media files.
+  - name: Glossaries and Style Guides
+    description: Reusable glossaries and style guides attachable to orders.
+paths:
+  /transcriptions:
+    get:
+      operationId: listTranscriptions
+      tags:
+        - Transcriptions
+      summary: List transcriptions
+      description: Lists transcriptions in an organization.
+      parameters:
+        - name: organization_id
+          in: query
+          required: false
+          description: Filter transcriptions by organization.
+          schema:
+            type: string
+        - name: folder_id
+          in: query
+          required: false
+          description: Filter transcriptions by folder.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of transcriptions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createTranscription
+      tags:
+        - Transcriptions
+      summary: Create a transcription (deprecated)
+      description: >-
+        Deprecated. Creating a transcription directly is superseded by the Orders
+        API; use POST /orders instead. Retained here because it remains documented
+        for backward compatibility.
+      deprecated: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranscriptionInput'
+      responses:
+        '201':
+          description: The created transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /transcriptions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getTranscription
+      tags:
+        - Transcriptions
+      summary: Retrieve a transcription
+      description: Retrieves a single transcription by ID, including its state and metadata.
+      responses:
+        '200':
+          description: The requested transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateTranscription
+      tags:
+        - Transcriptions
+      summary: Update a transcription
+      description: Updates editable details of a transcription, such as its name or folder.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                folder_id:
+                  type: string
+      responses:
+        '200':
+          description: The updated transcription.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transcription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      operationId: deleteTranscription
+      tags:
+        - Transcriptions
+      summary: Delete a transcription
+      description: Deletes a transcription.
+      responses:
+        '204':
+          description: The transcription was deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /transcriptions/{id}/summary:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getTranscriptionSummary
+      tags:
+        - Transcriptions
+      summary: Retrieve a transcription summary
+      description: >-
+        Retrieves the AI-generated summary for a transcription (for example, a
+        meeting summary), when available.
+      responses:
+        '200':
+          description: The transcription summary.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  summary:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders:
+    post:
+      operationId: createOrder
+      tags:
+        - Orders
+      summary: Create a transcription or subtitling order
+      description: >-
+        Creates an order to transcribe or subtitle a media file from a URL, using
+        automatic (machine) or professional (human) service. This is the preferred
+        way to submit new work.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: The created order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /orders/translation:
+    post:
+      operationId: createTranslationOrder
+      tags:
+        - Orders
+      summary: Create a translation order
+      description: Creates an order to translate an existing transcription into a target language.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - transcription_id
+                - target_language
+              properties:
+                transcription_id:
+                  type: string
+                target_language:
+                  type: string
+                  description: BCP-47 target language code.
+                service:
+                  type: string
+                  enum:
+                    - auto
+                    - pro
+      responses:
+        '201':
+          description: The created translation order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /orders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getOrder
+      tags:
+        - Orders
+      summary: Retrieve an order
+      description: Retrieves an order by ID, including its state.
+      responses:
+        '200':
+          description: The requested order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders/{id}/confirm:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    post:
+      operationId: confirmOrder
+      tags:
+        - Orders
+      summary: Confirm an incomplete order
+      description: >-
+        Confirms an order that was created in an incomplete state, submitting it
+        for processing.
+      responses:
+        '200':
+          description: The confirmed order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /exports:
+    post:
+      operationId: createExport
+      tags:
+        - Exports
+      summary: Create an export
+      description: >-
+        Creates an export that renders one or more transcriptions into a
+        downloadable file in the requested format.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportInput'
+      responses:
+        '201':
+          description: The created export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /exports/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      operationId: getExport
+      tags:
+        - Exports
+      summary: Retrieve an export
+      description: >-
+        Retrieves an export by ID. Poll this endpoint until the state is ready,
+        then use the download link.
+      responses:
+        '200':
+          description: The requested export.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Export'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /organizations:
+    get:
+      operationId: listOrganizations
+      tags:
+        - Organizations
+      summary: List organizations
+      description: Lists the organizations the authenticated user belongs to.
+      responses:
+        '200':
+          description: A list of organizations.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Organization'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /organization_memberships:
+    get:
+      operationId: listOrganizationMemberships
+      tags:
+        - Organization Memberships
+      summary: List organization memberships
+      description: Lists memberships, optionally filtered by organization.
+      parameters:
+        - name: organization_id
+          in: query
+          required: false
+          description: Filter memberships by organization.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of memberships.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/OrganizationMembership'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createOrganizationMembership
+      tags:
+        - Organization Memberships
+      summary: Add a member to an organization
+      description: Adds a user to an organization by email, with a role.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - organization_id
+                - email
+              properties:
+                organization_id:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                  enum:
+                    - admin
+                    - member
+      responses:
+        '201':
+          description: The created membership.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMembership'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+  /organization_memberships/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    patch:
+      operationId: updateOrganizationMembership
+      tags:
+        - Organization Memberships
+      summary: Update a membership
+      description: Updates a member's role in an organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum:
+                    - admin
+                    - member
+      responses:
+        '200':
+          description: The updated membership.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationMembership'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      operationId: deleteOrganizationMembership
+      tags:
+        - Organization Memberships
+      summary: Remove a member
+      description: Removes a member from an organization.
+      responses:
+        '204':
+          description: The membership was removed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /uploads/new:
+    get:
+      operationId: newUpload
+      tags:
+        - Uploads
+      summary: Request a signed upload URL
+      description: >-
+        Returns a signed URL to which a local media file can be PUT. The returned
+        temporary URL is then passed as tmp_url / url when creating a transcription
+        or order.
+      parameters:
+        - name: filename
+          in: query
+          required: true
+          description: The name of the file to be uploaded.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A signed upload URL.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Upload'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /glossaries:
+    get:
+      operationId: listGlossaries
+      tags:
+        - Glossaries and Style Guides
+      summary: List glossaries
+      description: Lists the glossaries available in an organization.
+      parameters:
+        - name: organization_id
+          in: query
+          required: true
+          description: The organization to list glossaries for.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of glossaries.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Glossary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /style_guides:
+    get:
+      operationId: listStyleGuides
+      tags:
+        - Glossaries and Style Guides
+      summary: List style guides
+      description: Lists the style guides available in an organization.
+      parameters:
+        - name: organization_id
+          in: query
+          required: true
+          description: The organization to list style guides for.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of style guides.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StyleGuide'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        API token from your Happy Scribe account settings, passed as
+        `Authorization: Bearer YOUR_API_TOKEN`.
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    TranscriptionInput:
+      type: object
+      required:
+        - name
+        - language
+        - tmp_url
+        - organization_id
+      properties:
+        name:
+          type: string
+        language:
+          type: string
+          description: BCP-47 language code of the audio.
+        tmp_url:
+          type: string
+          format: uri
+          description: Public or signed URL of the media file to transcribe.
+        service:
+          type: string
+          enum:
+            - auto
+            - pro
+            - alignment
+        organization_id:
+          type: string
+        folder_id:
+          type: string
+        is_subtitle:
+          type: boolean
+          default: false
+        tags:
+          type: array
+          items:
+            type: string
+    Transcription:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        state:
+          type: string
+          description: Processing state of the transcription.
+        language:
+          type: string
+        audioLengthInSeconds:
+          type: number
+        costInCents:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    OrderInput:
+      type: object
+      required:
+        - url
+        - language
+        - organization_id
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Public or signed URL of the media file.
+        language:
+          type: string
+          description: BCP-47 language code.
+        organization_id:
+          type: string
+        service:
+          type: string
+          enum:
+            - auto
+            - pro
+        is_subtitle:
+          type: boolean
+          default: false
+        confirm:
+          type: boolean
+          description: When true, submit immediately instead of leaving the order incomplete.
+        glossary_ids:
+          type: array
+          items:
+            type: string
+        style_guide_id:
+          type: string
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+            - incomplete
+            - waiting_for_payment
+            - submitted
+            - locked
+            - fulfilled
+            - failed
+            - canceled
+            - expired
+        service:
+          type: string
+        language:
+          type: string
+        transcription_ids:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
+    ExportInput:
+      type: object
+      required:
+        - format
+        - transcription_ids
+      properties:
+        format:
+          type: string
+          description: >-
+            Output format, e.g. txt, docx, pdf, srt, vtt, stl, json, csv, xlsx,
+            mp3, mp4, and editing-suite formats.
+        transcription_ids:
+          type: array
+          items:
+            type: string
+        show_timestamps:
+          type: boolean
+        show_speakers:
+          type: boolean
+        show_comments:
+          type: boolean
+        show_highlights:
+          type: boolean
+    Export:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+            - pending
+            - processing
+            - ready
+            - expired
+            - failed
+        format:
+          type: string
+        download_link:
+          type: string
+          format: uri
+          description: Present when the export state is ready.
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+            - owner
+            - admin
+            - member
+            - guest
+        membersCount:
+          type: integer
+        currency:
+          type: string
+        isHumanTranscriptionAllowed:
+          type: boolean
+        isHumanTranslationAllowed:
+          type: boolean
+    OrganizationMembership:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          type: string
+          enum:
+            - admin
+            - member
+        organizationId:
+          type: string
+        organizationName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    Upload:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: Signed URL to PUT the file to.
+        tmp_url:
+          type: string
+          format: uri
+          description: Temporary URL to pass when creating a transcription or order.
+    Glossary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
+    StyleGuide:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
