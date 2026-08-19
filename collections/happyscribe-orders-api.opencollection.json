@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports Orders API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a transcription or subtitling order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an order to transcribe or subtitle a media file from a URL, using automatic (machine) or professional (human) service. This is the preferred way to submit new work."
+        },
+        {
+          "info": {
+            "name": "Create a translation order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders/translation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an order to translate an existing transcription into a target language."
+        },
+        {
+          "info": {
+            "name": "Retrieve an order",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/orders/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Retrieves an order by ID, including its state."
+        },
+        {
+          "info": {
+            "name": "Confirm an incomplete order",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/orders/:id/confirm",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Confirms an order that was created in an incomplete state, submitting it for processing."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

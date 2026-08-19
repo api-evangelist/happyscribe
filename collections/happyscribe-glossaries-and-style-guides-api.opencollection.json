@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports Glossaries and Style Guides API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Glossaries and Style Guides",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List glossaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/glossaries",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "",
+                "type": "query",
+                "description": "The organization to list glossaries for."
+              }
+            ]
+          },
+          "docs": "Lists the glossaries available in an organization."
+        },
+        {
+          "info": {
+            "name": "List style guides",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/style_guides",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "",
+                "type": "query",
+                "description": "The organization to list style guides for."
+              }
+            ]
+          },
+          "docs": "Lists the style guides available in an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

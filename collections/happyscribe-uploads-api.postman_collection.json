@@ -1,0 +1,182 @@
+{
+  "item": [
+    {
+      "id": "9af70e87-3149-4adb-8cb8-f7a5059b4258",
+      "name": "Uploads",
+      "description": {
+        "content": "Signed upload URLs for local media files.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5e444ace-ba22-48d7-b4be-89734038d9c4",
+          "name": "Request a signed upload URL",
+          "request": {
+            "name": "Request a signed upload URL",
+            "description": {
+              "content": "Returns a signed URL to which a local media file can be PUT. The returned temporary URL is then passed as tmp_url / url when creating a transcription or order.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "uploads",
+                "new"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filename",
+                  "value": "<string>",
+                  "description": "(Required) The name of the file to be uploaded."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fd69843c-831d-43bf-bcf8-cbc45c65844a",
+              "name": "A signed upload URL.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "uploads",
+                    "new"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filename",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://ECvQBGRfjhMrGArnonzestlNglwoFZR.dmdzw1lRjhg-qHuSQ+BS+hbN,G9YQncPTLTEeAE9N\",\n  \"tmp_url\": \"http://hfRZGvLkVvfadZVWnTKNMBGPzE.cgspGkFOBOTS94N2T7cxjHvgzi6rl7aH9VvMT.cw5Tk6dr+o2D,wK8JhWDMRsTMwQbY30SQfykBg\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e543b545-1555-4057-8a0d-171e1518c440",
+              "name": "Missing or invalid Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "uploads",
+                    "new"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filename",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.happyscribe.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "82467247-e986-4b7e-ab27-32140f9c7247",
+    "name": "Happy Scribe Exports Uploads API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.\n\nContact Support:\n Name: Happy Scribe",
+      "type": "text/plain"
+    }
+  }
+}

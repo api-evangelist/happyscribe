@@ -1,0 +1,144 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports Transcriptions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Transcriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List transcriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter transcriptions by organization."
+              },
+              {
+                "name": "folder_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter transcriptions by folder."
+              }
+            ]
+          },
+          "docs": "Lists transcriptions in an organization."
+        },
+        {
+          "info": {
+            "name": "Create a transcription (deprecated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deprecated. Creating a transcription directly is superseded by the Orders API; use POST /orders instead. Retained here because it remains documented for backward compatibility."
+        },
+        {
+          "info": {
+            "name": "Retrieve a transcription",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Retrieves a single transcription by ID, including its state and metadata."
+        },
+        {
+          "info": {
+            "name": "Update a transcription",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates editable details of a transcription, such as its name or folder."
+        },
+        {
+          "info": {
+            "name": "Delete a transcription",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Deletes a transcription."
+        },
+        {
+          "info": {
+            "name": "Retrieve a transcription summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/transcriptions/:id/summary",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Retrieves the AI-generated summary for a transcription (for example, a meeting summary), when available."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

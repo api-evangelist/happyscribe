@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports Organization Memberships API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Organization Memberships",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List organization memberships",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships",
+            "params": [
+              {
+                "name": "organization_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter memberships by organization."
+              }
+            ]
+          },
+          "docs": "Lists memberships, optionally filtered by organization."
+        },
+        {
+          "info": {
+            "name": "Add a member to an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds a user to an organization by email, with a role."
+        },
+        {
+          "info": {
+            "name": "Update a membership",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a member's role in an organization."
+        },
+        {
+          "info": {
+            "name": "Remove a member",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.happyscribe.com/api/v1/organization_memberships/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Removes a member from an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

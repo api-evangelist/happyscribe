@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Exports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an export",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.happyscribe.com/api/v1/exports",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an export that renders one or more transcriptions into a downloadable file in the requested format."
+        },
+        {
+          "info": {
+            "name": "Retrieve an export",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/exports/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the resource."
+              }
+            ]
+          },
+          "docs": "Retrieves an export by ID. Poll this endpoint until the state is ready, then use the download link."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

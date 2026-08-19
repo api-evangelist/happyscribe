@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Happy Scribe Exports Uploads API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Uploads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request a signed upload URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.happyscribe.com/api/v1/uploads/new",
+            "params": [
+              {
+                "name": "filename",
+                "value": "",
+                "type": "query",
+                "description": "The name of the file to be uploaded."
+              }
+            ]
+          },
+          "docs": "Returns a signed URL to which a local media file can be PUT. The returned temporary URL is then passed as tmp_url / url when creating a transcription or order."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
