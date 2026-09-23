@@ -1,13 +1,7 @@
 {
   "provider": "happyscribe",
   "sources": [
-    "happyscribe-exports-api-openapi.yml",
-    "happyscribe-glossaries-and-style-guides-api-openapi.yml",
-    "happyscribe-orders-api-openapi.yml",
-    "happyscribe-organization-memberships-api-openapi.yml",
-    "happyscribe-organizations-api-openapi.yml",
-    "happyscribe-transcriptions-api-openapi.yml",
-    "happyscribe-uploads-api-openapi.yml"
+    "_original/happyscribe-openapi.yml"
   ],
   "outputs": [
     "happyscribe-exports-api-openapi.yml",
@@ -21,6 +15,18 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "happyscribe-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "happyscribe-exports-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-glossaries-and-style-guides-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-organization-memberships-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-organizations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-transcriptions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "happyscribe-uploads-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

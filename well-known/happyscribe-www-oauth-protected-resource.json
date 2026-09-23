@@ -1,0 +1,1 @@
+{"resource":"https://www.happyscribe.com/mcp","authorization_servers":["https://www.happyscribe.com"],"scopes_supported":["read","write"],"bearer_methods_supported":["header"],"resource_signing_alg_values_supported":[],"resource_documentation":"https://www.happyscribe.com/docs/mcp","resource_policy_uri":"https://www.happyscribe.com/privacy"}

@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Happy Scribe Exports Transcriptions API
-  description: The Happy Scribe API turns audio and video into text and subtitles programmatically. Submit work through the Orders API (automatic/machine or professional/human service), manage the resulting transcriptions, export finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, and editing-suite formats), and administer organizations and their members. Files are ingested by public URL or via a signed upload. All requests are REST over HTTPS and authenticated with a Bearer API token from your Happy Scribe account settings. Base URL https://www.happyscribe.com/api/v1. Endpoint paths and fields are grounded in the public developer documentation (dev.happyscribe.com); request/response schemas below are honestly modeled from that documentation and may not enumerate every field.
+  title: Happy Scribe Transcriptions API
+  description: The Happy Scribe API turns audio and video into text and subtitles programmatically.
   version: '1.0'
   contact:
     name: Happy Scribe
@@ -162,7 +162,33 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  responses:
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     TranscriptionInput:
       type: object
       required:
@@ -219,32 +245,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   parameters:
     Id:
       name: id
