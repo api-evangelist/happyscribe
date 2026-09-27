@@ -120,26 +120,34 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+          - incomplete
+          - waiting_for_payment
+          - submitted
+          - locked
+          - fulfilled
+          - failed
+          - canceled
+          - expired
+        service:
+          type: string
+        language:
+          type: string
+        transcription_ids:
+          type: array
+          items:
+            type: string
+        createdAt:
+          type: string
+          format: date-time
     OrderInput:
       type: object
       required:
@@ -173,33 +181,6 @@ components:
             type: string
         style_guide_id:
           type: string
-    Order:
-      type: object
-      properties:
-        id:
-          type: string
-        state:
-          type: string
-          enum:
-          - incomplete
-          - waiting_for_payment
-          - submitted
-          - locked
-          - fulfilled
-          - failed
-          - canceled
-          - expired
-        service:
-          type: string
-        language:
-          type: string
-        transcription_ids:
-          type: array
-          items:
-            type: string
-        createdAt:
-          type: string
-          format: date-time
     Error:
       type: object
       properties:
@@ -207,6 +188,25 @@ components:
           type: string
         message:
           type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Id:
       name: id

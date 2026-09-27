@@ -60,45 +60,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    ValidationError:
-      description: The request payload failed validation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    Export:
-      type: object
-      properties:
-        id:
-          type: string
-        state:
-          type: string
-          enum:
-          - pending
-          - processing
-          - ready
-          - expired
-          - failed
-        format:
-          type: string
-        download_link:
-          type: string
-          format: uri
-          description: Present when the export state is ready.
     ExportInput:
       type: object
       required:
@@ -120,6 +82,25 @@ components:
           type: boolean
         show_highlights:
           type: boolean
+    Export:
+      type: object
+      properties:
+        id:
+          type: string
+        state:
+          type: string
+          enum:
+          - pending
+          - processing
+          - ready
+          - expired
+          - failed
+        format:
+          type: string
+        download_link:
+          type: string
+          format: uri
+          description: Present when the export state is ready.
     Error:
       type: object
       properties:
@@ -127,6 +108,25 @@ components:
           type: string
         message:
           type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: The request payload failed validation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Id:
       name: id

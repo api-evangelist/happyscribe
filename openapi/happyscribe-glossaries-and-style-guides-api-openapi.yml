@@ -73,7 +73,7 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    StyleGuide:
+    Glossary:
       type: object
       properties:
         id:
@@ -89,7 +89,7 @@ components:
           type: string
         message:
           type: string
-    Glossary:
+    StyleGuide:
       type: object
       properties:
         id:
