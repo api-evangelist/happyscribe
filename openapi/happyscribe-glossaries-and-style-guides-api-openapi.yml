@@ -72,16 +72,14 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid Bearer token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Glossary:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        organizationId:
-          type: string
     Error:
       type: object
       properties:
@@ -98,13 +96,15 @@ components:
           type: string
         organizationId:
           type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Glossary:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        organizationId:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
