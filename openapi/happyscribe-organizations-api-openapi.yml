@@ -38,13 +38,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     Organization:
       type: object
       properties:
@@ -67,6 +60,13 @@ components:
           type: boolean
         isHumanTranslationAllowed:
           type: boolean
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
   responses:
     Unauthorized:
       description: Missing or invalid Bearer token.

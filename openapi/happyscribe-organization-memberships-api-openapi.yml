@@ -161,9 +161,17 @@ components:
         updatedAt:
           type: string
           format: date-time
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      description: The unique identifier of the resource.
+      schema:
+        type: string
   responses:
-    Unauthorized:
-      description: Missing or invalid Bearer token.
+    ValidationError:
+      description: The request payload failed validation.
       content:
         application/json:
           schema:
@@ -174,20 +182,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    ValidationError:
-      description: The request payload failed validation.
+    Unauthorized:
+      description: Missing or invalid Bearer token.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  parameters:
-    Id:
-      name: id
-      in: path
-      required: true
-      description: The unique identifier of the resource.
-      schema:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http

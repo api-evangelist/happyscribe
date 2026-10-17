@@ -73,13 +73,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     StyleGuide:
       type: object
       properties:
@@ -97,6 +90,13 @@ components:
         name:
           type: string
         organizationId:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
           type: string
   responses:
     Unauthorized:
