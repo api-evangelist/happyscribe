@@ -1,4 +1,4 @@
-# Happy Scribe (happyscribe)
+# Happy Scribe
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,183 +64,136 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Happy Scribe is a transcription, subtitling, and translation platform. Its REST API (base `https://www.happyscribe.com/api/v1`, Bearer-token auth) turns audio and video into text with automatic (machine) or professional (human) service, generates and translates subtitles/captions, and exports finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, plus editing-suite formats like Adobe Premiere XML, Final Cut Pro XML, EDL, and Avid DS). Work is organized under organizations and folders, files are ingested by URL or signed upload, and webhooks notify consumers when transcriptions complete.
+Happy Scribe is a transcription, subtitling, and translation platform. Its REST API (base https://www.happyscribe.com/api/v1, Bearer-token auth) turns audio and video into text with automatic (machine) or professional (human) transcription, generates and translates subtitles/captions, and exports finished transcripts into 15+ formats (SRT, VTT, STL, DOCX, PDF, TXT, JSON, CSV, XLSX, plus editing-suite formats like Adobe Premiere XML, Final Cut Pro XML, EDL, and Avid DS). Work is organized under organizations and folders, files are ingested by URL or signed upload, and webhooks notify consumers when transcriptions complete.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/happyscribe/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/happyscribe/refs/heads/main/apis.yml)
+**Areas:** Audio Transcription · Transcription · Speech-to-Text · Subtitles · Captions · Translation
 
-## Access Model
+## Happy Scribe on APIs.io
 
-Happy Scribe is a commercial SaaS; there is no open-source server component. API access is available to account holders and is keyed by a **Bearer API token** generated in your Happy Scribe account settings. API usage draws down the **same billing balance as the web app** — automatic (AI) work consumes per-minute AI credits from your subscription/top-ups, and professional (human) transcription or subtitling is billed separately per minute. Long-running work is **asynchronous**: create an order or export, then poll its state, or register a **webhook** to be notified when a transcription completes.
+Everything profiled for Happy Scribe is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/happyscribe/](https://apis.io/providers/happyscribe/)** — or go straight to one of the APIs or properties below.
 
-The developer documentation lives at [dev.happyscribe.com](https://dev.happyscribe.com). Endpoint paths, the auth scheme, and the resource set below are grounded in that public documentation. The request/response field schemas in `openapi/happyscribe-openapi.yml` are **honestly modeled** from the docs and may not enumerate every field — reconcile against the live reference before treating them as authoritative.
+### APIs (7)
 
-> **Note on "Shared Links":** Happy Scribe does **not** currently document a shared/public-links API resource. Exposing public share links through the API is an open, user-requested feature, not a shipped endpoint, so it is not modeled here. Sharing/collaboration exists in the product UI only.
+- [Happy Scribe Exports API](https://apis.io/apis/happyscribe/happyscribe-exports-api/) — Render finished transcripts into downloadable files.
+- [Happy Scribe Glossaries and Style Guides API](https://apis.io/apis/happyscribe/happyscribe-glossaries-and-style-guides-api/) — Reusable glossaries and style guides attachable to orders.
+- [Happy Scribe Orders API](https://apis.io/apis/happyscribe/happyscribe-orders-api/) — Create and track transcription, subtitling, and translation orders.
+- [Happy Scribe Organization Memberships API](https://apis.io/apis/happyscribe/happyscribe-organization-memberships-api/) — Manage members and roles within an organization.
+- [Happy Scribe Organizations API](https://apis.io/apis/happyscribe/happyscribe-organizations-api/) — Organizations (workspaces) the authenticated user belongs to.
+- [Happy Scribe Transcriptions API](https://apis.io/apis/happyscribe/happyscribe-transcriptions-api/) — List, retrieve, update, and delete transcriptions.
+- [Happy Scribe Uploads API](https://apis.io/apis/happyscribe/happyscribe-uploads-api/) — Signed upload URLs for local media files.
 
-## Tags
+### Published properties
 
-- Audio Transcription
-- Transcription
-- Speech-to-Text
-- Subtitles
-- Captions
-- Translation
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## Timestamps
+#### MCP servers (1)
 
-- **Created:** 2026-07-11
-- **Modified:** 2026-07-11
+Model Context Protocol servers that expose the API to agents.
 
-## APIs
+- [happyscribe](https://apis.io/servers/happyscribe/happyscribe/)
 
-### Happy Scribe Transcriptions API
+#### Agentic access (1)
 
-List, retrieve, update, and delete transcriptions, and fetch an AI-generated summary of a transcription. Each transcription carries its language, processing state, audio length, and cost. Creating transcriptions directly is deprecated in favor of the Orders API. Core audio-to-text / speech-to-text surface.
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
+- [Happyscribe Agentic Access](https://apis.io/agentic-access/happyscribe/happyscribe-agentic-access/)
 
-#### Tags
+#### Collections (8)
 
-- Audio Transcription
-- Transcription
-- Speech-to-Text
+Postman and Open Collection request collections.
 
-#### Properties
+- [Happy Scribe API](https://apis.io/collections/happyscribe/open-happyscribe/)
+- [Happy Scribe Exports API](https://apis.io/collections/happyscribe/open-happyscribe-exports-api/)
+- [Happy Scribe Exports Glossaries and Style Guides API](https://apis.io/collections/happyscribe/open-happyscribe-glossaries-and-style-guides-api/)
+- [Happy Scribe Exports Orders API](https://apis.io/collections/happyscribe/open-happyscribe-orders-api/)
+- [Happy Scribe Exports Organization Memberships API](https://apis.io/collections/happyscribe/open-happyscribe-organization-memberships-api/)
+- [Happy Scribe Exports Organizations API](https://apis.io/collections/happyscribe/open-happyscribe-organizations-api/)
+- [Happy Scribe Exports Transcriptions API](https://apis.io/collections/happyscribe/open-happyscribe-transcriptions-api/)
+- [Happy Scribe Exports Uploads API](https://apis.io/collections/happyscribe/open-happyscribe-uploads-api/)
 
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [API Reference](https://dev.happyscribe.com/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Security (1)
 
-### Happy Scribe Orders API
+Authentication, trust centre, and vulnerability disclosure.
 
-The preferred way to submit new work. Create transcription or subtitling orders from a media URL and create translation orders, choosing automatic (machine) or professional (human) service, then confirm and track order state through fulfillment. Replaces the deprecated direct transcription creation endpoint.
+- [Happyscribe Authentication](https://apis.io/security/happyscribe/happyscribe-authentication/)
 
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
+#### Plans and pricing (1)
 
-#### Tags
+Published plans, tiers and prices.
 
-- Transcription
-- Subtitles
-- Translation
+- [Happyscribe Plans Pricing](https://apis.io/plans/happyscribe/happyscribe-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published request limits.
 
-### Happy Scribe Exports API
+- [Happyscribe Rate Limits](https://apis.io/rate-limits/happyscribe/happyscribe-rate-limits/)
 
-Render finished transcripts into downloadable files across 15+ formats — subtitle/caption formats (SRT, VTT, STL), documents (DOCX, PDF, TXT, JSON, CSV, XLSX), and editing-suite formats (Adobe Premiere XML, Final Cut Pro XML, EDL, Avid DS). Create an export, then poll it for state and a download link.
+#### FinOps (1)
 
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
+What the API costs to run, by operation.
 
-#### Tags
+- [Happyscribe Finops](https://apis.io/finops/happyscribe/happyscribe-finops/)
 
-- Exports
-- Subtitles
-- Captions
+## Where to find this API
 
-#### Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Happy Scribe Organizations API
-
-List the organizations (workspaces) the authenticated user belongs to, with role, member count, currency, and whether human transcription and translation are enabled. Organizations scope transcriptions, orders, and billing.
-
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
-
-#### Tags
-
-- Organizations
-- Workspaces
-
-#### Properties
-
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Happy Scribe Organization Memberships API
-
-Manage who belongs to an organization — list memberships, add a member by email with a role, update a member's role, and remove a member. Enables programmatic workspace and seat administration.
-
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
-
-#### Tags
-
-- Members
-- Access Management
-
-#### Properties
-
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Happy Scribe Uploads API
-
-Request a signed upload URL for a local media file, then PUT the file to that URL and pass the resulting temporary URL when creating a transcription or order. The ingestion path for files not already hosted at a public URL.
-
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
-
-#### Tags
-
-- Uploads
-- Files
-
-#### Properties
-
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Happy Scribe Glossaries and Style Guides API
-
-List the glossaries and style guides available in an organization so they can be attached to orders to improve transcription accuracy and enforce formatting conventions.
-
-- **Human URL:** [https://dev.happyscribe.com/sections/product/](https://dev.happyscribe.com/sections/product/)
-- **Base URL:** `https://www.happyscribe.com/api/v1`
-
-#### Tags
-
-- Glossaries
-- Style Guides
-
-#### Properties
-
-- [Documentation](https://dev.happyscribe.com/sections/product/)
-- [OpenAPI](openapi/happyscribe-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/happyscribe.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/happyscribe.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [Authentication](authentication/happyscribe-authentication.yml)
-- [LinkedIn](https://www.linkedin.com/company/happyscribe)
 - [Website](https://www.happyscribe.com)
 - [Documentation](https://dev.happyscribe.com)
-- [Plans](plans/happyscribe-plans-pricing.yml)
-- [Rate Limits](rate-limits/happyscribe-rate-limits.yml)
-- [Fin Ops](finops/happyscribe-finops.yml)
 - [Blog](https://www.happyscribe.com/blog)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 27.0** — thin · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 68.3 |
+| Contract quality | 53.6 |
+| Contract governance | 0.0 |
+| Operational transparency | 7.9 |
+| Developer ergonomics | 31.0 |
+| Access clarity | 7.9 |
+
+**Agent readiness 42.4** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 5.9** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/happyscribe/](https://apis.io/providers/happyscribe/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Happy Scribe: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/happyscribe/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
